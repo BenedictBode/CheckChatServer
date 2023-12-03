@@ -72,6 +72,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+    post:
+      summary: Create a new message
+      description: Adds a new message to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
     put:
       summary: Update a message
       description: Updates the details of an existing message.
