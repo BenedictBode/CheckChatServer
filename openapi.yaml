@@ -176,26 +176,6 @@ paths:
           description: File uploaded successfully
         '400':
           description: No file uploaded
-
-components:
-  schemas:
-    Message:
-      type: object
-      properties:
-        id:
-          type: string
-        conversation_id:
-          type: string
-        # Define other properties of a Message
-
-    Conversation:
-      type: object
-      properties:
-        id:
-          type: string
-        # Define other properties of a Conversation
-
-              
   /reset:
     get:
       summary: Reset all messages and conversations
