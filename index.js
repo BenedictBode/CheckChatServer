@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use('', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/conversations', (req, res) => {
   res.json(conversations);
