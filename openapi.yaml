@@ -1,13 +1,12 @@
 openapi: 3.0.0
 info:
-  title: Messaging Service API
-  description: API for messaging and conversation management
+  title: CheckChat API
+  description: API for CheckChat App
   version: 1.0.0
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/BENEDICTBODE11/CheckChat/1.0.0
   - url: https://hidden-bayou-91236-aef7370094a2.herokuapp.com
+    description: Heroku server
+  - url: localhost:3000
     description: Local server
 
 paths:
@@ -23,6 +22,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Conversation'
+    put:
+      summary: Update a conversation
+      description: Updates the details of an existing conversation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+      responses:
+        '200':
+          description: Conversation updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '404':
+          description: Conversation not found
 
   /conversation/{id}:
     get:
@@ -55,6 +72,24 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+    put:
+      summary: Update a message
+      description: Updates the details of an existing message.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: Message updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
 
   /message/{id}:
     get:
@@ -93,6 +128,57 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+                      
+
+  /upload/{conversation_id}/{message_id}:
+    post:
+      summary: Upload a file
+      description: Uploads a file to a specific message in a conversation.
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: message_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully
+        '400':
+          description: No file uploaded
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        conversation_id:
+          type: string
+        # Define other properties of a Message
+
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+        # Define other properties of a Conversation
+
               
   /reset:
     get:
@@ -100,6 +186,7 @@ paths:
       responses:
         '200':
           description: status response
+          
 
 components:
   schemas:
@@ -143,3 +230,4 @@ components:
         hidden_at:
           type: string
           format: date-time
+  

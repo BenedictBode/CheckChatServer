@@ -4,6 +4,10 @@ const multer = require('multer'); // for file uploads
 const fs = require('fs'); // for file system operations
 const path = require('path'); // for handling file paths
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./openapi.yaml');
+
 const app = express();
 
 // Mock data
@@ -31,6 +35,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+app.use('', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/conversations', (req, res) => {
   res.json(conversations);
@@ -61,6 +67,7 @@ app.get('/message/:id', (req, res) => {
 
   res.json(message);
 });
+
 
 app.get('/messages/conversation/:conversation_id', (req, res) => {
   const conversation_id = parseInt(req.params.conversation_id);
