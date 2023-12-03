@@ -7,9 +7,8 @@ const path = require('path'); // for handling file paths
 const app = express();
 
 // Mock data
-let messages = [{"message_type":"quote_offer","text":"Hey, I would love to work for you. my mail is benedict.bode11@gmail.com and my phone number is +4915757778208 and my website is https:\/\/www.google.com just leave a quick message but my price is $ 1500","created_at":"2023-12-03T09:26:09Z","sender_type":"service_provider","attachments":[],"conversation_id":1,"id":1},{"message_type":"quote_offer","conversation_id":2,"sender_type":"service_provider","created_at":"2023-12-03T09:26:09Z","id":1,"text":"Hey I have a great offer for you! I would fix your broken toilet for only 100000$ 😇","attachments":[]}]
+let messages = [{"message_type":"quote_offer","text":"Hey, I would love to work for you. my mail is colton.ruecker@gmail.com and my phone number is +4915756678208 and my website is https:\/\/www.ColtonCanFixIt.com just leave a quick message. My price is $1500 😊","created_at":"2023-12-03T09:26:09Z","sender_type":"service_provider","attachments":[],"conversation_id":1,"id":1},{"message_type":"quote_offer","conversation_id":2,"sender_type":"service_provider","created_at":"2023-12-03T09:26:09Z","id":1,"text":"Hey, I would fix your broken laptop for 450€! Just call me 0154566777","attachments":[]}]
 let conversations = [{"service_provider_name":"Colton Ruecker","id":1,"updated_at":"2023-12-03T09:26:48Z","state":"quoted","created_at":"2023-12-03T09:26:48Z","customer_name":"Reyes Herzog"},{"customer_name":"Alycia Homenick","id":2,"created_at":"2023-12-03T09:26:48Z","updated_at":"2023-12-03T09:26:48Z","state":"quoted","service_provider_name":"Ampara West"}]
-// Routes
 
 app.use(express.json());
 
@@ -39,6 +38,42 @@ app.get('/conversations', (req, res) => {
 
 app.get('/messages', (req, res) => {
   res.json(messages);
+});
+
+app.get('/conversation/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const conversation = conversations.find(c => c.id === id);
+
+  if (!conversation) {
+    return res.status(404).send('Conversation not found');
+  }
+
+  res.json(conversation);
+});
+
+app.get('/message/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const message = messages.find(m => m.id === id);
+
+  if (!message) {
+    return res.status(404).send('Message not found');
+  }
+
+  res.json(message);
+});
+
+app.get('/messages/conversation/:conversation_id', (req, res) => {
+  const conversation_id = parseInt(req.params.conversation_id);
+  const filteredMessages = messages.filter(m => m.conversation_id === conversation_id);
+
+  res.json(filteredMessages);
+});
+
+
+app.get('/reset', (req, res) => {
+  messages = [{"message_type":"quote_offer","text":"Hey, I would love to work for you. my mail is colton.ruecker@gmail.com and my phone number is +4915756678208 and my website is https:\/\/www.ColtonCanFixIt.com just leave a quick message. My price is $1500 😊","created_at":"2023-12-03T09:26:09Z","sender_type":"service_provider","attachments":[],"conversation_id":1,"id":1},{"message_type":"quote_offer","conversation_id":2,"sender_type":"service_provider","created_at":"2023-12-03T09:26:09Z","id":1,"text":"Hey I have a great offer for you! I would fix your broken toilet for only 100000$ 😈","attachments":[]}]
+  conversations = [{"service_provider_name":"Colton Ruecker","id":1,"updated_at":"2023-12-03T09:26:48Z","state":"quoted","created_at":"2023-12-03T09:26:48Z","customer_name":"Reyes Herzog"},{"customer_name":"Alycia Homenick","id":2,"created_at":"2023-12-03T09:26:48Z","updated_at":"2023-12-03T09:26:48Z","state":"quoted","service_provider_name":"Ampara West"}]
+  return res.status(200).send('resetted');
 });
 
 app.post('/messages', (req, res) => {

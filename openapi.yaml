@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: Messaging Service API
+  description: API for messaging and conversation management
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/BENEDICTBODE11/CheckChat/1.0.0
+  - url: https://hidden-bayou-91236-aef7370094a2.herokuapp.com
+    description: Local server
+
+paths:
+  /conversations:
+    get:
+      summary: Get all conversations
+      responses:
+        '200':
+          description: An array of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Conversation'
+
+  /conversation/{id}:
+    get:
+      summary: Get a conversation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single conversation object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '404':
+          description: Conversation not found
+
+  /messages:
+    get:
+      summary: Get all messages
+      responses:
+        '200':
+          description: An array of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+
+  /message/{id}:
+    get:
+      summary: Get a message by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single message object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+
+  /messages/conversation/{conversation_id}:
+    get:
+      summary: Get messages for a specific conversation ID
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: An array of messages for the given conversation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+              
+  /reset:
+    get:
+      summary: Reset all messages and conversations
+      responses:
+        '200':
+          description: status response
+
+components:
+  schemas:
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        service_provider_name:
+          type: string
+        customer_name:
+          type: string
+        state:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversation_id:
+          type: integer
+        sender_type:
+          type: string
+        message_type:
+          type: string
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        read_at:
+          type: string
+          format: date-time
+        hidden_at:
+          type: string
+          format: date-time
